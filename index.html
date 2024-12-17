@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>K&D Minibar Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Circular:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #FF385C;
+            --secondary-color: #00A699;
+            --background-color: #F7F7F7;
+            --text-color: #484848;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Circular', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+            background-color: var(--background-color);
+            overscroll-behavior-y: none;
+        }
+
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #DBDBDB;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform 0.2s;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .invoice {
+            background-color: #F9F9F9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .invoice-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #DBDBDB;
+        }
+
+        .invoice-total {
+            font-weight: bold;
+            text-align: right;
+            padding-top: 15px;
+        }
+
+        .section-title {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .print-btn {
+            background: var(--secondary-color);
+            margin-top: 10px;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #invoice, #invoice * {
+                visibility: visible;
+            }
+            #invoice {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container" id="appContainer">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">K</div>
+                <div class="logo-text">& D Minibar</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="form-group">
+                <label for="villa">Výběr vily</label>
+                <select id="villa" onchange="changeVillaStyle()">
+                    <option value="oh-yeah">OH YEAH VILLA</option>
+                    <option value="little-castle">LITTLE CASTLE</option>
+                    <option value="amazing-pool">AMAZING POOL</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="exchange-rate">Aktuální kurz CZK/EUR</label>
+                <input type="number" id="exchange-rate" placeholder="Zadejte kurz" step="0.1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="guests">Počet hostů</label>
+                <input type="number" id="guests" placeholder="Počet hostů" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="nights">Počet nocí</label>
+                <input type="number" id="nights" placeholder="Počet nocí" min="1" required>
+            </div>
+
+            <div class="section-title">Položky v CZK</div>
+            <div class="form-group">
+                <label for="budvar">Budvar (59 Kč)</label>
+                <input type="number" id="budvar" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="malibu">Malibu (99 Kč)</label>
+                <input type="number" id="malibu" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="jack-s-colou">Jack s colou (99 Kč)</label>
+                <input type="number" id="jack-s-colou" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="moscow-mule">Moscow Mule (99 Kč)</label>
+                <input type="number" id="moscow-mule" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="gin-tonic">Gin-Tonic (99 Kč)</label>
+                <input type="number" id="gin-tonic" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="mojito">Mojito (99 Kč)</label>
+                <input type="number" id="mojito" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="coca-cola">Coca-Cola (32 Kč)</label>
+                <input type="number" id="coca-cola" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="sprite">Sprite (32 Kč)</label>
+                <input type="number" id="sprite" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="red-bull">Red Bull (59 Kč)</label>
+                <input type="number" id="red-bull" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="prosecco">Prosecco (390 Kč)</label>
+                <input type="number" id="prosecco" placeholder="0" min="0">
+            </div>
+
+            <div class="section-title">Položky v EUR</div>
+            <div class="form-group">
+                <label for="beer-30l">Pivo sud 30l (125 €)</label>
+                <input type="number" id="beer-30l" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="beer-50l">Pivo sud 50l (175 €)</label>
+                <input type="number" id="beer-50l" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="gas">Plyn (12 €)</label>
+                <input type="number" id="gas" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="wellness">Wellness (vlastní cena v €)</label>
+                <input type="number" id="wellness" placeholder="0" min="0">
+            </div>
+
+            <button class="btn" onclick="generateInvoice()">Generovat fakturu</button>
+
+            <div id="invoice" class="invoice" style="display:none;">
+                <h3>Faktura</h3>
+                <div id="invoice-items"></div>
+                <div id="invoice-totals" class="invoice-total"></div>
+                <button class="btn print-btn" onclick="printInvoice()">Tisk faktury</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeVillaStyle() {
+            const villa = document.getElementById('villa').value;
+            const villaColors = {
+                'oh-yeah': { primary: '#FF385C', secondary: '#00A699' },
+                'little-castle': { primary: '#4A90E2', secondary: '#50C878' },
+                'amazing-pool': { primary: '#FF6B6B', secondary: '#4ECDC4' }
+            };
+
+            const color = villaColors[villa];
+            document.documentElement.style.setProperty('--primary-color', color.primary);
+            document.documentElement.style.setProperty('--secondary-color', color.secondary);
+        }
+
+        function generateInvoice() {
+            const exchangeRate = parseFloat(document.getElementById('exchange-rate').value);
+            const guests = parseInt(document.getElementById('guests').value);
+            const nights = parseInt(document.getElementById('nights').value);
+
+            if (!exchangeRate || !guests || !nights) {
+                alert('Prosím vyplňte všechny povinné údaje.');
+                return;
+            }
+
+            const prices = {
+                'budvar': 59, 'malibu': 99, 'jack-s-colou': 99, 
+                'moscow-mule': 99, 'gin-tonic': 99, 'mojito': 99,
+                'coca-cola': 32, 'sprite': 32, 'red-bull': 59, 
+                'prosecco': 390,
+                'beer-30l': 125, 'beer-50l': 175, 'gas': 12
+            };
+
+            const items = [];
+            let totalCZK = 0;
+            let totalEUR = 0;
+
+            // City Tax výpočet
+            const cityTaxRate = 2; // 2 € na hosta na noc
+            const cityTax = guests * nights * cityTaxRate;
+            totalEUR += cityTax;
+            
+            items.push({
+                name: 'City Tax',
+                quantity: `${guests} hostů x ${nights} nocí`,
+                priceEUR: cityTaxRate,
+                totalEUR: cityTax
+            });
+
+            for (let item in prices) {
+                const quantity = parseInt(document.getElementById(item).value) || 0;
+                if (quantity > 0) {
+                    const price = item.includes('beer') || item === 'gas' ? quantity * prices[item] : quantity * prices[item];
+                    const itemTotal = item.includes('beer') || item === 'gas' ? price : price;
+                    
+                    if (item.includes('beer') || item === 'gas') {
+                        totalEUR += itemTotal;
+                        items.push({
+                            name: document.querySelector(`label[for="${item}"]`).textContent,
+                            quantity: quantity,
+                            priceEUR: prices[item],
+                            totalEUR: itemTotal
+                        });
+                    } else {
+                        totalCZK += itemTotal;
+                        items.push({
+                            name: document.querySelector(`label[for="${item}"]`).textContent,
+                            quantity: quantity,
+                            priceCZK: prices[item],
+                            totalCZK: itemTotal
+                        });
+                    }
+                }
+            }
+
+            const wellness = parseFloat(document.getElementById('wellness').value) || 0;
+            if (wellness > 0) {
+                totalEUR += wellness;
+                items.push({
+                    name: 'Wellness',
+                    quantity: 1,
+                    priceEUR: wellness,
+                    totalEUR: wellness
+                });
+            }
+
+            const invoiceElement = document.getElementById('invoice');
+            const invoiceItemsElement = document.getElementById('invoice-items');
+            const invoiceTotalsElement = document.getElementById('invoice-totals');
+
+            invoiceItemsElement.innerHTML = items.map(item => `
+                <div class="invoice-item">
+                    <span>${item.name} (${item.quantity}x)</span>
+                    <span>${item.priceCZK ? item.totalCZK + ' Kč' : item.totalEUR + ' €'}</span>
+                </div>
+            `).join('');
+
+            const totalInEUR = (totalCZK / exchangeRate) + totalEUR;
+            invoiceTotalsElement.innerHTML = `
+                <div>Celkem CZK: ${totalCZK.toFixed(2)} Kč</div>
+                <div>Celkem EUR: ${totalEUR.toFixed(2)} €</div>
+                <div>Celkem v EUR po přepočtu: ${totalInEUR.toFixed(2)} €</div>
+            `;
+
+            invoiceElement.style.display = 'block';
+        }
+
+        function printInvoice() {
+            window.print();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            changeVillaStyle();
+        });
+    </script>
+</body>
+</html>
