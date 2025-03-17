@@ -2,382 +2,157 @@
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>K&D Minibar Management</title>
-    <link href="https://fonts.googleapis.com/css2?family=Circular:wght@300;400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #FF385C;
-            --secondary-color: #00A699;
-            --background-color: #F7F7F7;
-            --text-color: #484848;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Circular', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        }
-
-        html, body {
-            height: 100%;
-            background-color: var(--background-color);
-            overscroll-behavior-y: none;
-        }
-
-        .app-container {
-            max-width: 600px;
-            margin: 0 auto;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background-color: white;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 20px;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background-color: white;
-            color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            margin-right: 10px;
-            font-weight: bold;
-        }
-
-        .logo-text {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .content {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-color);
-            font-weight: 600;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #DBDBDB;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: transform 0.2s;
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .invoice {
-            background-color: #F9F9F9;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .invoice-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #DBDBDB;
-        }
-
-        .invoice-total {
-            font-weight: bold;
-            text-align: right;
-            padding-top: 15px;
-        }
-
-        .section-title {
-            margin-top: 20px;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        .print-btn {
-            background: var(--secondary-color);
-            margin-top: 10px;
-        }
-
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            #invoice, #invoice * {
-                visibility: visible;
-            }
-            #invoice {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-            }
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minibar POS Systém</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="app-container" id="appContainer">
-        <div class="header">
+    <div class="app-container">
+        <header>
             <div class="logo">
-                <div class="logo-icon">K</div>
-                <div class="logo-text">& D Minibar</div>
+                <i class="fas fa-glass-martini-alt"></i>
+                <h1>Minibar POS</h1>
             </div>
-        </div>
-
-        <div class="content">
-            <div class="form-group">
-                <label for="villa">Výběr vily</label>
-                <select id="villa" onchange="changeVillaStyle()">
-                    <option value="oh-yeah">OH YEAH VILLA</option>
-                    <option value="little-castle">LITTLE CASTLE</option>
-                    <option value="amazing-pool">AMAZING POOL</option>
-                </select>
+            <div class="header-controls">
+                <div class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                    <span class="toggle-switch">
+                        <input type="checkbox" id="theme-toggle-checkbox">
+                        <label for="theme-toggle-checkbox"></label>
+                    </span>
+                    <i class="fas fa-sun"></i>
+                </div>
+                <div class="villa-selector">
+                    <select id="villa-select">
+                        <option value="oh-yeah">Oh Yeah Villa</option>
+                        <option value="amazing-pool">Amazing Pool Villa</option>
+                        <option value="little-castle">Little Castle Villa</option>
+                    </select>
+                </div>
             </div>
-
-            <div class="form-group">
-                <label for="exchange-rate">Aktuální kurz CZK/EUR</label>
-                <input type="number" id="exchange-rate" placeholder="Zadejte kurz" step="0.1" required>
+        </header>
+        
+        <main>
+            <div class="tabs">
+                <button class="tab-button active" data-category="all">Vše</button>
+                <button class="tab-button" data-category="non-alcoholic">Nealko</button>
+                <button class="tab-button" data-category="alcoholic">Alkohol</button>
+                <button class="tab-button" data-category="beer">Pivo</button>
+                <button class="tab-button" data-category="relax">Relax</button>
             </div>
-
-            <div class="form-group">
-                <label for="guests">Počet hostů</label>
-                <input type="number" id="guests" placeholder="Počet hostů" min="1" required>
+            
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search-input" placeholder="Hledat produkt...">
             </div>
-
-            <div class="form-group">
-                <label for="nights">Počet nocí</label>
-                <input type="number" id="nights" placeholder="Počet nocí" min="1" required>
+            
+            <div class="products-container"></div>
+        </main>
+        
+        <aside class="cart-sidebar">
+            <div class="cart-header">
+                <h2><i class="fas fa-shopping-cart"></i> Košík</h2>
+                <button id="clear-cart" class="clear-cart-btn">
+                    <i class="fas fa-trash"></i>
+                </button>
             </div>
-
-            <div class="section-title">Položky v CZK</div>
-            <div class="form-group">
-                <label for="budvar">Budvar (59 Kč)</label>
-                <input type="number" id="budvar" placeholder="0" min="0">
+            
+            <div class="cart-items"></div>
+            
+            <div class="cart-summary">
+                <div class="subtotal">
+                    <span>Mezisoučet:</span>
+                    <span class="subtotal-value">0 CZK</span>
+                </div>
+                <button id="checkout-btn" class="checkout-btn" disabled>
+                    Dokončit objednávku
+                </button>
             </div>
-            <div class="form-group">
-                <label for="malibu">Malibu (99 Kč)</label>
-                <input type="number" id="malibu" placeholder="0" min="0">
+        </aside>
+    </div>
+    
+    <!-- Modal pro dokončení objednávky -->
+    <div class="modal" id="checkout-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Dokončit objednávku</h2>
+            
+            <div class="customer-info">
+                <div class="form-group">
+                    <label for="customer-name">Jméno hosta:</label>
+                    <input type="text" id="customer-name" placeholder="Zadejte jméno hosta">
+                </div>
+                <div class="form-group">
+                    <label for="customer-room">Číslo pokoje:</label>
+                    <input type="text" id="customer-room" placeholder="Zadejte číslo pokoje">
+                </div>
             </div>
-            <div class="form-group">
-                <label for="jack-s-colou">Jack s colou (99 Kč)</label>
-                <input type="number" id="jack-s-colou" placeholder="0" min="0">
+            
+            <div class="order-summary">
+                <h3>Shrnutí objednávky</h3>
+                <div class="order-items"></div>
+                <div class="order-total">
+                    <span>Celkem:</span>
+                    <span class="total-value">0 CZK</span>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="moscow-mule">Moscow Mule (99 Kč)</label>
-                <input type="number" id="moscow-mule" placeholder="0" min="0">
+            
+            <div class="payment-methods">
+                <h3>Způsob platby</h3>
+                <div class="payment-options">
+                    <button class="payment-option" data-method="cash">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Hotovost</span>
+                    </button>
+                    <button class="payment-option" data-method="card">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Karta</span>
+                    </button>
+                    <button class="payment-option" data-method="room">
+                        <i class="fas fa-bed"></i>
+                        <span>Na pokoj</span>
+                    </button>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="gin-tonic">Gin-Tonic (99 Kč)</label>
-                <input type="number" id="gin-tonic" placeholder="0" min="0">
-            </div>
-            <div class="form-group">
-                <label for="mojito">Mojito (99 Kč)</label>
-                <input type="number" id="mojito" placeholder="0" min="0">
-            </div>
-            <div class="form-group">
-                <label for="coca-cola">Coca-Cola (32 Kč)</label>
-                <input type="number" id="coca-cola" placeholder="0" min="0">
-            </div>
-            <div class="form-group">
-                <label for="sprite">Sprite (32 Kč)</label>
-                <input type="number" id="sprite" placeholder="0" min="0">
-            </div>
-            <div class="form-group">
-                <label for="red-bull">Red Bull (59 Kč)</label>
-                <input type="number" id="red-bull" placeholder="0" min="0">
-            </div>
-            <div class="form-group">
-                <label for="prosecco">Prosecco (390 Kč)</label>
-                <input type="number" id="prosecco" placeholder="0" min="0">
-            </div>
-
-            <div class="section-title">Položky v EUR</div>
-            <div class="form-group">
-                <label for="beer-30l">Pivo sud 30l (125 €)</label>
-                <input type="number" id="beer-30l" placeholder="0" min="0">
-            </div>
-            <div class="form-group">
-                <label for="beer-50l">Pivo sud 50l (175 €)</label>
-                <input type="number" id="beer-50l" placeholder="0" min="0">
-            </div>
-            <div class="form-group">
-                <label for="gas">Plyn (12 €)</label>
-                <input type="number" id="gas" placeholder="0" min="0">
-            </div>
-            <div class="form-group">
-                <label for="wellness">Wellness (vlastní cena v €)</label>
-                <input type="number" id="wellness" placeholder="0" min="0">
-            </div>
-
-            <button class="btn" onclick="generateInvoice()">Generovat fakturu</button>
-
-            <div id="invoice" class="invoice" style="display:none;">
-                <h3>Faktura</h3>
-                <div id="invoice-items"></div>
-                <div id="invoice-totals" class="invoice-total"></div>
-                <button class="btn print-btn" onclick="printInvoice()">Tisk faktury</button>
-            </div>
+            
+            <button id="confirm-order" class="confirm-order-btn" disabled>
+                Potvrdit objednávku
+            </button>
         </div>
     </div>
-
-    <script>
-        function changeVillaStyle() {
-            const villa = document.getElementById('villa').value;
-            const villaColors = {
-                'oh-yeah': { primary: '#FF385C', secondary: '#00A699' },
-                'little-castle': { primary: '#4A90E2', secondary: '#50C878' },
-                'amazing-pool': { primary: '#FF6B6B', secondary: '#4ECDC4' }
-            };
-
-            const color = villaColors[villa];
-            document.documentElement.style.setProperty('--primary-color', color.primary);
-            document.documentElement.style.setProperty('--secondary-color', color.secondary);
-        }
-
-        function generateInvoice() {
-            const exchangeRate = parseFloat(document.getElementById('exchange-rate').value);
-            const guests = parseInt(document.getElementById('guests').value);
-            const nights = parseInt(document.getElementById('nights').value);
-
-            if (!exchangeRate || !guests || !nights) {
-                alert('Prosím vyplňte všechny povinné údaje.');
-                return;
-            }
-
-            const prices = {
-                'budvar': 59, 'malibu': 99, 'jack-s-colou': 99, 
-                'moscow-mule': 99, 'gin-tonic': 99, 'mojito': 99,
-                'coca-cola': 32, 'sprite': 32, 'red-bull': 59, 
-                'prosecco': 390,
-                'beer-30l': 125, 'beer-50l': 175, 'gas': 12
-            };
-
-            const items = [];
-            let totalCZK = 0;
-            let totalEUR = 0;
-
-            // City Tax výpočet
-            const cityTaxRate = 2; // 2 € na hosta na noc
-            const cityTax = guests * nights * cityTaxRate;
-            totalEUR += cityTax;
+    
+    <!-- Modal pro vlastní cenu -->
+    <div class="modal" id="custom-price-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Zadejte cenu</h2>
             
-            items.push({
-                name: 'City Tax',
-                quantity: `${guests} hostů x ${nights} nocí`,
-                priceEUR: cityTaxRate,
-                totalEUR: cityTax
-            });
-
-            for (let item in prices) {
-                const quantity = parseInt(document.getElementById(item).value) || 0;
-                if (quantity > 0) {
-                    const price = item.includes('beer') || item === 'gas' ? quantity * prices[item] : quantity * prices[item];
-                    const itemTotal = item.includes('beer') || item === 'gas' ? price : price;
-                    
-                    if (item.includes('beer') || item === 'gas') {
-                        totalEUR += itemTotal;
-                        items.push({
-                            name: document.querySelector(`label[for="${item}"]`).textContent,
-                            quantity: quantity,
-                            priceEUR: prices[item],
-                            totalEUR: itemTotal
-                        });
-                    } else {
-                        totalCZK += itemTotal;
-                        items.push({
-                            name: document.querySelector(`label[for="${item}"]`).textContent,
-                            quantity: quantity,
-                            priceCZK: prices[item],
-                            totalCZK: itemTotal
-                        });
-                    }
-                }
-            }
-
-            const wellness = parseFloat(document.getElementById('wellness').value) || 0;
-            if (wellness > 0) {
-                totalEUR += wellness;
-                items.push({
-                    name: 'Wellness',
-                    quantity: 1,
-                    priceEUR: wellness,
-                    totalEUR: wellness
-                });
-            }
-
-            const invoiceElement = document.getElementById('invoice');
-            const invoiceItemsElement = document.getElementById('invoice-items');
-            const invoiceTotalsElement = document.getElementById('invoice-totals');
-
-            invoiceItemsElement.innerHTML = items.map(item => `
-                <div class="invoice-item">
-                    <span>${item.name} (${item.quantity}x)</span>
-                    <span>${item.priceCZK ? item.totalCZK + ' Kč' : item.totalEUR + ' €'}</span>
-                </div>
-            `).join('');
-
-            const totalInEUR = (totalCZK / exchangeRate) + totalEUR;
-            invoiceTotalsElement.innerHTML = `
-                <div>Celkem CZK: ${totalCZK.toFixed(2)} Kč</div>
-                <div>Celkem EUR: ${totalEUR.toFixed(2)} €</div>
-                <div>Celkem v EUR po přepočtu: ${totalInEUR.toFixed(2)} €</div>
-            `;
-
-            invoiceElement.style.display = 'block';
-        }
-
-        function printInvoice() {
-            window.print();
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            changeVillaStyle();
-        });
-    </script>
+            <div class="form-group">
+                <label for="custom-price-input">Cena (EUR):</label>
+                <input type="number" id="custom-price-input" min="0" step="0.01">
+            </div>
+            
+            <button id="confirm-custom-price" class="confirm-btn">
+                Potvrdit
+            </button>
+        </div>
+    </div>
+    
+    <!-- Success notification -->
+    <div class="notification" id="success-notification">
+        <i class="fas fa-check-circle"></i>
+        <span class="notification-message"></span>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="js/inventory.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
