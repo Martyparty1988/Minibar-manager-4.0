@@ -1,8 +1,3 @@
-/**
- * Product inventory data for the minibar POS system
- * Contains lists of products available in each villa
- */
-
 const inventoryItems = [
     // Blank first item pro případ potřeby
     { name: '', price: 0, currency: 'CZK', image: '', category: '' },
